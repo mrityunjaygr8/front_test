@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import FastAPI, Header, HTTPException, status
+from fastapi import FastAPI, Header, HTTPException, status, File, UploadFile, Form
 from pydantic import BaseModel
 import math
 import json
@@ -29,6 +29,10 @@ def filter_func(x, severity):
 class LoginData(BaseModel):
     username: str
     password: str
+
+@app.post("/upload")
+async def upload(data: str = Form(...), upload_file_1: UploadFile = File(...), upload_file_2: UploadFile = File(...)):
+    return {"data": data, "f_1": upload_file_1.filename, "f_2": upload_file_2.filename}
 
 @app.post("/login")
 async def login(data: LoginData):
